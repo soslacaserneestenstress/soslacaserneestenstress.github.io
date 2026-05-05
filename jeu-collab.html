@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOS – La Caserne est en Stress</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap');
+
+:root {
+  --rouge:    #A50104;
+  --rouge2:   #590004;
+  --rouge-vif:#FF0000;
+  --gris-f:   #4A4A4A;
+  --gris-c:   #D9D9D9;
+  --blanc:    #F3F3F3;
+  --or:       #FC8A04;
+  --marine:   #192064;
+  --noir:     #111111;
+  --bg:       #1a0002;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--bg);
+  color: var(--blanc);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ══ BACKGROUND TEXTURE ══ */
+body::before {
+  content:'';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(165,1,4,0.35) 0%, transparent 70%),
+    repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px),
+    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ══ HEADER ══ */
+.header {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(180deg, var(--rouge2) 0%, #3a0002 100%);
+  border-bottom: 3px solid var(--or);
+  box-shadow: 0 4px 30px rgba(165,1,4,0.6);
+}
+
+.header-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-img {
+  width: 62px;
+  height: 62px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(252,138,4,0.5));
+  flex-shrink: 0;
+}
+
+.header-text { flex:1; }
+.header-text h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blanc);
+  text-shadow: 0 0 20px rgba(252,138,4,0.4);
+  line-height: 1;
+}
+.header-text p {
+  font-size: 11px;
+  color: var(--gris-c);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+/* ══ NAV ══ */
+.nav {
+  display: flex;
+  background: rgba(0,0,0,0.4);
+  border-bottom: 2px solid rgba(252,138,4,0.2);
+  overflow-x: auto;
+  position: relative;
+  z-index: 10;
+}
+.nav-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 13px 8px 11px;
+  border: none;
+  background: transparent;
+  color: rgba(243,243,243,0.5);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.nav-btn .nav-icon { font-size: 18px; }
+.nav-btn:hover { color: var(--blanc); background: rgba(165,1,4,0.2); }
+.nav-btn.active { color: var(--or); border-bottom-color: var(--or); background: rgba(252,138,4,0.08); }
+
+/* ══ PAGES ══ */
+.page { display: none; position: relative; z-index: 1; }
+.page.active { display: block; }
+.inner { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; }
+
+/* ══ HERO SITUATION ══ */
+.situation-hero {
+  background: linear-gradient(135deg, var(--rouge) 0%, var(--rouge2) 100%);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(252,138,4,0.3);
+  position: relative;
+  overflow: hidden;
+}
+.situation-hero::after {
+  content: '🔥';
+  position: absolute;
+  right: 16px; top: 12px;
+  font-size: 48px;
+  opacity: 0.12;
+  transform: rotate(10deg);
+}
+.tag-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--or);
+  color: var(--noir);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 4px 10px;
+  margin-bottom: 12px;
+}
+.live-dot {
+  width: 7px; height: 7px;
+  background: var(--noir);
+  border-radius: 50%;
+  animation: blink 1.2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.situation-hero h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  line-height: 1.1;
+}
+.situation-hero p { font-size: 15px; line-height: 1.7; color: rgba(243,243,243,0.92); }
+
+.timer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+.timer-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.timer-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--or), #FFD700);
+  transition: width 0.5s;
+}
+.timer-txt { font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; color:var(--or); white-space:nowrap; }
+
+/* ══ STAT PILLS ══ */
+.stat-pills {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.pill {
+  flex: 1;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 12px 10px;
+  text-align: center;
+}
+.pill-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--or);
+  line-height: 1;
+}
+.pill-lbl { font-size: 10px; color: rgba(243,243,243,0.4); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+
+/* ══ FORM ZONE ══ */
+.form-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 20px;
+}
+.form-card-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--or);
+  margin-bottom: 6px;
+}
+.anon-note {
+  font-size: 12px;
+  color: rgba(243,243,243,0.4);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* TEXTAREA STYLED */
+.fancy-textarea {
+  width: 100%;
+  background: rgba(0,0,0,0.35);
+  border: 2px solid rgba(165,1,4,0.4);
+  border-radius: 10px;
+  color: var(--blanc);
+  font-family: 'Barlow', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 14px 16px;
+  resize: none;
+  height: 120px;
+  transition: border-color 0.2s;
+}
+.fancy-textarea:focus { outline:none; border-color: var(--or); }
+.fancy-textarea::placeholder { color: rgba(243,243,243,0.28); }
+
+.cta-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--rouge-vif), var(--rouge));
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(255,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+}
+.cta-btn::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: linear-gradient(rgba(255,255,255,0.1),transparent);
+  pointer-events:none;
+}
+.cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(255,0,0,0.45); }
+.cta-btn:active { transform: translateY(0); }
+.cta-btn:disabled { background: #333; box-shadow: none; cursor: not-allowed; }
+
+/* ══ SUCCESS ══ */
+.success-anim {
+  display: none;
+  text-align: center;
+  padding: 24px;
+  animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+@keyframes popIn {
+  from { opacity:0; transform:scale(0.8); }
+  to { opacity:1; transform:scale(1); }
+}
+.success-anim.show { display: block; }
+.success-flame { font-size: 56px; display: block; margin-bottom: 10px; }
+.success-anim h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--or);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.success-anim p { color: rgba(243,243,243,0.6); font-size: 14px; margin-top: 6px; }
+
+/* ══ PAGE RÉPONSES ══ */
+.week-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gris-c);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.week-label::before {
+  content:'';
+  flex:1;
+  height:1px;
+  background: rgba(255,255,255,0.1);
+}
+.week-label::after {
+  content:'';
+  flex:1;
+  height:1px;
+  background: rgba(255,255,255,0.1);
+}
+
+.resp-card {
+  background: rgba(255,255,255,0.04);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 14px;
+  border-left: 4px solid transparent;
+  position: relative;
+  transition: transform 0.15s;
+}
+.resp-card:hover { transform: translateX(3px); }
+.resp-card.rank1 { border-left-color: #FFD700; background: rgba(255,215,0,0.06); }
+.resp-card.rank2 { border-left-color: #C0C0C0; }
+.resp-card.rank3 { border-left-color: #CD7F32; }
+
+.resp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.rank-info { display:flex; align-items:center; gap:8px; }
+.rank-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0.25;
+}
+.rank-num.r1 { color: #FFD700; opacity:1; }
+.rank-num.r2 { color: #C0C0C0; opacity:1; }
+.rank-num.r3 { color: #CD7F32; opacity:1; }
+.rank-tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.flames-row { display:flex; gap:2px; }
+.fl { font-size: 20px; }
+
+.score-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.score-track { flex:1; height:4px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden; }
+.score-fill { height:100%; background: linear-gradient(90deg, var(--rouge), var(--or)); border-radius:2px; }
+.score-pct { font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; color:var(--or); }
+
+.resp-text { font-size:14px; line-height:1.7; color:rgba(243,243,243,0.85); }
+
+/* ══ CLASSEMENT / LEADERBOARD ══ */
+.winner-podium {
+  background: linear-gradient(135deg, #2a1a00, #3d2600);
+  border: 2px solid var(--or);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.winner-podium::before {
+  content:'🏆';
+  position:absolute;
+  font-size:80px;
+  opacity:0.07;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+}
+.winner-label {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--or);
+  margin-bottom:8px;
+}
+.winner-badge-wrap { display:inline-block; position:relative; margin-bottom:8px; }
+.winner-avatar {
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--rouge), var(--rouge2));
+  border: 3px solid var(--or);
+  display: flex; align-items: center; justify-content: center;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  box-shadow: 0 0 20px rgba(252,138,4,0.5);
+  margin: 0 auto 8px;
+}
+.badge-crown { position:absolute; top:-14px; left:50%; transform:translateX(-50%); font-size:26px; }
+.winner-name {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--blanc);
+}
+.winner-flames {
+  font-size: 22px;
+  margin-top: 4px;
+}
+.winner-sub { font-size:13px; color:rgba(243,243,243,0.5); margin-top:4px; }
+
+/* BADGE OFFICIEL GAGNANT */
+.badge-winner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--or), #FFD700);
+  color: var(--noir);
+  border-radius: 20px;
+  padding: 7px 16px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:900;
+  font-size:14px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-top: 10px;
+  box-shadow: 0 4px 16px rgba(252,138,4,0.4);
+}
+
+.lb-list { display:flex; flex-direction:column; gap:8px; }
+.lb-row {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.15s;
+}
+.lb-row:hover { background: rgba(165,1,4,0.15); }
+.lb-pos {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:20px;
+  font-weight:900;
+  color: rgba(243,243,243,0.25);
+  width:28px;
+  text-align:center;
+  flex-shrink:0;
+}
+.lb-avatar-sm {
+  width:38px; height:38px;
+  border-radius:50%;
+  background: var(--rouge2);
+  border: 2px solid rgba(165,1,4,0.5);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;
+  font-weight:800;
+  flex-shrink:0;
+}
+.lb-info { flex:1; }
+.lb-name-sm { font-size:14px; font-weight:500; }
+.lb-grade { font-size:11px; color:rgba(243,243,243,0.4); margin-top:1px; }
+.lb-score {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+}
+.lb-count {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:22px;
+  font-weight:900;
+  color:var(--or);
+  line-height:1;
+}
+.lb-fl { font-size:12px; letter-spacing:-2px; }
+
+/* ══ ASSISTANT IA ══ */
+.chat-wrap {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(252,138,4,0.2);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.chat-topbar {
+  background: linear-gradient(90deg, var(--rouge2), #1a0010);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(252,138,4,0.2);
+}
+.online-dot { width:8px; height:8px; background:#2ECC71; border-radius:50%; flex-shrink:0; }
+.chat-topbar-info { flex:1; }
+.chat-topbar-name { font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:1px; }
+.chat-topbar-sub { font-size:11px; color:rgba(243,243,243,0.45); }
+
+.chat-body {
+  height: 300px;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-behavior: smooth;
+}
+.chat-body::-webkit-scrollbar { width:4px; }
+.chat-body::-webkit-scrollbar-track { background:transparent; }
+.chat-body::-webkit-scrollbar-thumb { background:rgba(165,1,4,0.4); border-radius:2px; }
+
+.cmsg {
+  max-width: 82%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.cmsg.bot { background:rgba(255,255,255,0.06); align-self:flex-start; border-bottom-left-radius:3px; }
+.cmsg.user { background: var(--rouge); align-self:flex-end; border-bottom-right-radius:3px; }
+.cmsg.typing {
+  background:rgba(255,255,255,0.06);
+  align-self:flex-start;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding: 14px 18px;
+}
+.tdot {
+  width:6px; height:6px;
+  background:var(--gris-c);
+  border-radius:50%;
+  animation: tdot 1.2s infinite;
+}
+.tdot:nth-child(2) { animation-delay:.2s; }
+.tdot:nth-child(3) { animation-delay:.4s; }
+@keyframes tdot { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+.chat-foot {
+  display:flex;
+  gap:8px;
+  padding:12px 14px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  background: rgba(0,0,0,0.2);
+}
+.chat-inp {
+  flex:1;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:20px;
+  color:var(--blanc);
+  font-family:'Barlow',sans-serif;
+  font-size:14px;
+  padding:9px 16px;
+  transition:border 0.2s;
+}
+.chat-inp:focus { outline:none; border-color:var(--or); }
+.chat-inp::placeholder { color:rgba(255,255,255,0.3); }
+.chat-go {
+  padding:9px 18px;
+  background:var(--rouge);
+  border:none;
+  border-radius:20px;
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+  transition:background 0.2s;
+}
+.chat-go:hover { background:var(--rouge-vif); }
+
+/* Quick suggestions */
+.quick-chips {
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  padding:10px 14px 0;
+}
+.chip {
+  padding:5px 12px;
+  background:rgba(165,1,4,0.2);
+  border:1px solid rgba(165,1,4,0.4);
+  border-radius:14px;
+  font-size:12px;
+  color:var(--gris-c);
+  cursor:pointer;
+  transition:all 0.15s;
+}
+.chip:hover { background:rgba(165,1,4,0.4); color:white; }
+
+/* ══ ADMIN ══ */
+.admin-card {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;
+  padding:20px;
+  margin-bottom:16px;
+}
+.admin-title {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:16px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--or);
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.fg { margin-bottom:12px; }
+.fl-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:rgba(243,243,243,0.4); margin-bottom:5px; display:block; }
+input[type=text], input[type=date], .admin-ta {
+  width:100%;
+  background:rgba(0,0,0,0.35);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:8px;
+  color:var(--blanc);
+  font-family:'Barlow',sans-serif;
+  font-size:14px;
+  padding:10px 12px;
+  transition:border 0.2s;
+}
+input:focus, .admin-ta:focus { outline:none; border-color:var(--or); }
+.admin-ta { resize:vertical; min-height:90px; }
+
+.btn-pub {
+  padding:12px 22px;
+  border:none;
+  border-radius:8px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+  font-size:16px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-pub.primary { background:var(--rouge); color:white; }
+.btn-pub.primary:hover { background:var(--rouge-vif); }
+
+.ai-btn {
+  width:100%;
+  margin-top:14px;
+  padding:15px;
+  background:linear-gradient(135deg, var(--marine), #0d1440);
+  border:1px solid rgba(100,150,255,0.25);
+  border-radius:10px;
+  color:white;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all 0.2s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  box-shadow:0 4px 20px rgba(25,32,100,0.5);
+}
+.ai-btn:hover { filter:brightness(1.15); transform:translateY(-1px); }
+.ai-btn:disabled { opacity:0.45; cursor:not-allowed; transform:none; }
+
+.ai-result {
+  display:none;
+  margin-top:14px;
+  background:rgba(25,32,100,0.2);
+  border:1px solid rgba(100,150,255,0.2);
+  border-radius:10px;
+  padding:16px;
+  font-size:14px;
+  line-height:1.8;
+  white-space: pre-wrap;
+}
+.ai-result.show { display:block; }
+
+/* ══ CONTACT FORM ══ */
+.contact-card {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;
+  padding:20px;
+  margin-top:18px;
+}
+.contact-title {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:16px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--gris-c);
+  margin-bottom:14px;
+}
+
+/* ══ INFO BOX ══ */
+.info-strip {
+  background:rgba(25,32,100,0.3);
+  border:1px solid rgba(100,150,255,0.2);
+  border-radius:10px;
+  padding:12px 16px;
+  font-size:13px;
+  color:var(--gris-c);
+  margin-bottom:16px;
+  line-height:1.6;
+}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:520px){
+  .header-inner { padding:10px 12px; }
+  .header-text h1 { font-size:22px; }
+  .logo-img { width:50px; height:50px; }
+  .stat-pills { flex-wrap:wrap; }
+  .pill { min-width:calc(50% - 5px); }
+}
+
+/* char count */
+.ccount { font-size:11px; color:rgba(243,243,243,0.3); text-align:right; margin-top:4px; }
+
+/* hidden */
+.hidden { display:none !important; }
+
+/* separator */
+.sep { height:1px; background:rgba(255,255,255,0.07); margin:20px 0; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <img src="/mnt/user-data/uploads/image.png" class="logo-img" alt="Logo SOS La Caserne">
+    <div class="header-text">
+      <h1>SOS – La Caserne est en Stress</h1>
+      <p>SDIS 13 · Formation RPS · Jeu collaboratif hebdomadaire</p>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="goPage('situation',this)">
+    <span class="nav-icon">🚨</span>Situation
+  </button>
+  <button class="nav-btn" onclick="goPage('reponses',this)">
+    <span class="nav-icon">💬</span>Résultats
+  </button>
+  <button class="nav-btn" onclick="goPage('classement',this)">
+    <span class="nav-icon">🏆</span>Classement
+  </button>
+  <button class="nav-btn" onclick="goPage('assistant',this)">
+    <span class="nav-icon">🤖</span>Assistant
+  </button>
+  <button class="nav-btn" onclick="goPage('admin',this)">
+    <span class="nav-icon">🔒</span>Référent
+  </button>
+</nav>
+
+<!-- ═══════════════ PAGE SITUATION ═══════════════ -->
+<div class="page active" id="page-situation">
+<div class="inner">
+
+  <div class="situation-hero">
+    <div class="tag-live"><div class="live-dot"></div> En cours – Semaine 14</div>
+    <h2 id="sit-titre">Intervention de masse – surcharge émotionnelle</h2>
+    <p id="sit-texte">Vous êtes de retour d'une intervention difficile impliquant plusieurs victimes dont un enfant. Vos collègues parlent peu. Le chef de groupe ne débriefe pas l'équipe. Vous ressentez une tension dans votre corps, des pensées intrusives, et avez du mal à vous concentrer sur votre relève. <strong>Comment gérez-vous cette situation ?</strong></p>
+    <div class="timer-row">
+      <div class="timer-track"><div class="timer-bar" id="timer-bar" style="width:55%"></div></div>
+      <div class="timer-txt" id="timer-txt">3 jours restants</div>
+    </div>
+  </div>
+
+  <div class="stat-pills">
+    <div class="pill">
+      <div class="pill-val" id="st-rep">12</div>
+      <div class="pill-lbl">Réponses</div>
+    </div>
+    <div class="pill">
+      <div class="pill-val" id="st-agents">12</div>
+      <div class="pill-lbl">Agents</div>
+    </div>
+    <div class="pill">
+      <div class="pill-val">S14</div>
+      <div class="pill-lbl">Semaine</div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-card" id="form-wrap">
+    <div class="form-card-title">⚡ Votre solution</div>
+    <div class="anon-note">🔒 Réponse 100% anonyme · 60 secondes max</div>
+    <textarea class="fancy-textarea" id="rep-input" placeholder="Comment géreriez-vous le stress dans cette situation ? Techniques, soutien, actions concrètes…" maxlength="600" oninput="document.getElementById('ccount').textContent=this.value.length"></textarea>
+    <div class="ccount"><span id="ccount">0</span>/600</div>
+    <button class="cta-btn" onclick="submitRep()">🔥 Envoyer ma proposition</button>
+  </div>
+
+  <div class="success-anim" id="success-anim">
+    <span class="success-flame">🔥</span>
+    <h3>Proposition envoyée !</h3>
+    <p>Réponse anonyme enregistrée.<br>Les résultats sont affichés en fin de semaine.</p>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════ PAGE RÉPONSES ═══════════════ -->
+<div class="page" id="page-reponses">
+<div class="inner">
+  <div class="week-label">Résultats analysés · Semaine 14</div>
+
+  <div class="resp-card rank1">
+    <div class="resp-head">
+      <div class="rank-info">
+        <div class="rank-num r1">1</div>
+        <div>
+          <div class="rank-tag" style="color:#FFD700">🥇 Meilleure réponse</div>
+        </div>
+      </div>
+      <div class="flames-row">
+        <span class="fl">🔥</span><span class="fl">🔥</span><span class="fl">🔥</span>
+      </div>
+    </div>
+    <div class="resp-text">J'utilise d'abord la cohérence cardiaque (5-5-5) pour réguler mon système nerveux immédiatement après l'intervention. Je parle ensuite avec un collègue de confiance pour exprimer ce que j'ai ressenti. Le soir, j'écris 3 lignes dans un carnet pour "déposer" l'intervention. Si les pensées persistent 48h, je sollicite le référent RPS.</div>
+    <div class="score-line">
+      <div class="score-track"><div class="score-fill" style="width:92%"></div></div>
+      <div class="score-pct">92%</div>
+    </div>
+  </div>
+
+  <div class="resp-card rank2">
+    <div class="resp-head">
+      <div class="rank-info">
+        <div class="rank-num r2">2</div>
+        <div><div class="rank-tag" style="color:#C0C0C0">🥈 2e place</div></div>
+      </div>
+      <div class="flames-row">
+        <span class="fl">🔥</span><span class="fl">🔥</span><span class="fl" style="opacity:0.2">🔥</span>
+      </div>
+    </div>
+    <div class="resp-text">Je reconnais que c'est normal après une telle intervention. Je ne m'isole pas, je reste avec l'équipe. Je fais une activité physique le soir pour décharger la tension. J'évite l'alcool. Si ça dure, j'en parle à ma famille ou je contacte le psychologue du SDIS.</div>
+    <div class="score-line">
+      <div class="score-track"><div class="score-fill" style="width:78%"></div></div>
+      <div class="score-pct">78%</div>
+    </div>
+  </div>
+
+  <div class="resp-card rank3">
+    <div class="resp-head">
+      <div class="rank-info">
+        <div class="rank-num r3">3</div>
+        <div><div class="rank-tag" style="color:#CD7F32">🥉 3e place</div></div>
+      </div>
+      <div class="flames-row">
+        <span class="fl">🔥</span><span class="fl" style="opacity:0.2">🔥</span><span class="fl" style="opacity:0.2">🔥</span>
+      </div>
+    </div>
+    <div class="resp-text">Je prends l'air quelques minutes seul pour souffler. Je me dis que j'ai fait mon travail du mieux possible. Je me concentre sur les tâches simples de fin de garde pour me reconnecter au concret.</div>
+    <div class="score-line">
+      <div class="score-track"><div class="score-fill" style="width:61%"></div></div>
+      <div class="score-pct">61%</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE CLASSEMENT ═══════════════ -->
+<div class="page" id="page-classement">
+<div class="inner">
+
+  <!-- GAGNANT DE LA SEMAINE -->
+  <div class="winner-podium">
+    <div class="winner-label">🏆 Gagnant de la semaine · S14</div>
+    <div class="winner-badge-wrap">
+      <div class="badge-crown">👑</div>
+      <div class="winner-avatar">JP</div>
+    </div>
+    <div class="winner-name">Agent anonyme 1</div>
+    <div class="winner-sub">Caporal-chef · 3 🔥 cette semaine</div>
+    <div>
+      <span class="badge-winner">🔥 Flamme d'or – S14</span>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stat-pills" style="margin-bottom:18px">
+    <div class="pill"><div class="pill-val">8</div><div class="pill-lbl">Semaines</div></div>
+    <div class="pill"><div class="pill-val">34</div><div class="pill-lbl">Agents actifs</div></div>
+    <div class="pill"><div class="pill-val">🔥</div><div class="pill-lbl">Classement</div></div>
+  </div>
+
+  <div class="lb-list" id="lb-list"></div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE ASSISTANT ═══════════════ -->
+<div class="page" id="page-assistant">
+<div class="inner">
+
+  <div class="info-strip">
+    🤖 Posez vos questions sur la gestion du stress, les RPS, ou le jeu. Toutes les conversations sont confidentielles et non enregistrées.
+  </div>
+
+  <div class="chat-wrap">
+    <div class="chat-topbar">
+      <div class="online-dot"></div>
+      <div class="chat-topbar-info">
+        <div class="chat-topbar-name">Assistant RPS – SDIS 13</div>
+        <div class="chat-topbar-sub">Propulsé par Claude · En ligne</div>
+      </div>
+    </div>
+    <div class="quick-chips">
+      <div class="chip" onclick="sendChip('Comment gérer le stress après une intervention difficile ?')">Après intervention</div>
+      <div class="chip" onclick="sendChip('Qu\'est-ce que la cohérence cardiaque ?')">Cohérence cardiaque</div>
+      <div class="chip" onclick="sendChip('Quels sont les signes d\'épuisement professionnel ?')">Signes d'épuisement</div>
+      <div class="chip" onclick="sendChip('Comment participer au jeu de la semaine ?')">Comment jouer ?</div>
+    </div>
+    <div class="chat-body" id="chat-body">
+      <div class="cmsg bot">Bonjour ! Je suis votre assistant RPS. Posez-moi vos questions sur la gestion du stress, les risques psychosociaux, ou le jeu de la semaine. Je suis disponible 24h/24, en toute confidentialité. 🔥</div>
+    </div>
+    <div class="chat-foot">
+      <input class="chat-inp" type="text" id="chat-inp" placeholder="Votre question…" onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chat-go" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+
+  <div class="contact-card">
+    <div class="contact-title">📬 Contacter le référent RPS</div>
+    <div class="fg">
+      <label class="fl-label">Votre message</label>
+      <textarea class="admin-ta" placeholder="Décrivez votre situation ou votre question…" style="min-height:80px"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <input type="text" placeholder="Prénom (facultatif)" style="max-width:200px;flex:1">
+      <button class="btn-pub primary" onclick="alert('✅ Message transmis au référent RPS dans les 48h.')">Envoyer</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE ADMIN ═══════════════ -->
+<div class="page" id="page-admin">
+<div class="inner">
+
+  <div class="info-strip">
+    🔒 Espace réservé au référent RPS. Publiez la situation hebdomadaire, saisissez la réponse idéale, puis lancez l'analyse IA.
+  </div>
+
+  <!-- Publier -->
+  <div class="admin-card">
+    <div class="admin-title">📢 Publier la situation</div>
+    <div class="fg">
+      <label class="fl-label">Titre court</label>
+      <input type="text" id="a-titre" value="Intervention de masse – surcharge émotionnelle">
+    </div>
+    <div class="fg">
+      <label class="fl-label">Description de la situation</label>
+      <textarea class="admin-ta" id="a-texte" style="min-height:110px">Vous êtes de retour d'une intervention difficile impliquant plusieurs victimes dont un enfant. Vos collègues parlent peu. Le chef de groupe ne débriefe pas l'équipe. Vous ressentez une tension dans votre corps, des pensées intrusives, et avez du mal à vous concentrer sur votre relève. Comment gérez-vous cette situation pour préserver votre équilibre psychologique ?</textarea>
+    </div>
+    <div class="fg" style="display:flex;gap:10px">
+      <div style="flex:1">
+        <label class="fl-label">Du</label>
+        <input type="date" value="2025-04-28">
+      </div>
+      <div style="flex:1">
+        <label class="fl-label">Au</label>
+        <input type="date" value="2025-05-04">
+      </div>
+    </div>
+    <button class="btn-pub primary" onclick="publishSit()">✅ Publier</button>
+  </div>
+
+  <!-- Analyse IA -->
+  <div class="admin-card">
+    <div class="admin-title">🤖 Analyse IA des réponses</div>
+    <div class="fg">
+      <label class="fl-label">Réponse idéale (référence)</label>
+      <textarea class="admin-ta" id="a-ideal" style="min-height:100px">La gestion immédiate passe par des techniques de régulation physiologique (cohérence cardiaque, respiration), éviter l'isolement social, maintenir le lien avec les pairs. À moyen terme : expression émotionnelle (écriture, verbal), activité physique, hygiène de vie. Si persistance 48-72h : recours au soutien psychologique (psychologue SDIS, référent RPS). Reconnaître les signaux d'alerte (pensées intrusives, hypervigilance, troubles du sommeil).</textarea>
+    </div>
+    <div class="fg">
+      <label class="fl-label">Réponses agents à analyser (une par paragraphe)</label>
+      <textarea class="admin-ta" id="a-reps" style="min-height:140px">J'utilise d'abord la cohérence cardiaque (5-5-5) pour réguler mon système nerveux immédiatement après l'intervention. Je parle ensuite avec un collègue de confiance pour exprimer ce que j'ai ressenti sans que ça reste bloqué. Le soir, j'écris 3 lignes dans un carnet pour "déposer" l'intervention. Si les pensées persistent 48h après, je sollicite le référent RPS ou le soutien psychologique.
+Je reconnais d'abord que c'est normal de se sentir comme ça après une telle intervention. Je ne m'isole pas : je reste avec l'équipe le temps du repas. Je fais une activité physique le soir pour décharger la tension. J'évite l'alcool même si c'est tentant. Si je sens que ça dure, j'en parle à ma famille ou je contacte le psychologue du SDIS.
+Je prends l'air quelques minutes seul pour souffler. Je me dis que j'ai fait mon travail du mieux possible. Je me concentre sur les tâches simples de fin de garde pour me reconnecter au concret.</textarea>
+    </div>
+    <button class="ai-btn" id="ai-btn" onclick="lancerIA()">
+      <span>⚡</span> Lancer l'analyse IA
+    </button>
+    <div class="ai-result" id="ai-result"></div>
+  </div>
+
+</div>
+</div>
+
+<script>
+/* ══ NAV ══ */
+function goPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ══ LEADERBOARD ══ */
+const agents = [
+  { i:'JP', name:'Agent anonyme 1', grade:'Caporal-chef', fl:9 },
+  { i:'ML', name:'Agent anonyme 2', grade:'Sergent', fl:7 },
+  { i:'RA', name:'Agent anonyme 3', grade:'Sapeur-pompier', fl:6 },
+  { i:'CB', name:'Agent anonyme 4', grade:'Adjudant', fl:4 },
+  { i:'TL', name:'Agent anonyme 5', grade:'Caporal', fl:4 },
+  { i:'SG', name:'Agent anonyme 6', grade:'Sapeur-pompier', fl:3 },
+  { i:'FD', name:'Agent anonyme 7', grade:'Caporal-chef', fl:2 },
+];
+const lb = document.getElementById('lb-list');
+agents.forEach((a,i) => {
+  lb.innerHTML += `
+  <div class="lb-row">
+    <div class="lb-pos">${i+1}</div>
+    <div class="lb-avatar-sm">${a.i}</div>
+    <div class="lb-info">
+      <div class="lb-name-sm">${a.name}</div>
+      <div class="lb-grade">${a.grade}</div>
+    </div>
+    <div class="lb-score">
+      <div class="lb-count">${a.fl}</div>
+      <div class="lb-fl">${'🔥'.repeat(Math.min(a.fl,5))}</div>
+    </div>
+  </div>`;
+});
+
+/* ══ SUBMIT RÉPONSE ══ */
+function submitRep() {
+  const v = document.getElementById('rep-input').value.trim();
+  if (v.length < 20) { alert('Rédigez une réponse plus complète (20 caractères min).'); return; }
+  document.getElementById('form-wrap').classList.add('hidden');
+  document.getElementById('success-anim').classList.add('show');
+  document.getElementById('st-rep').textContent = parseInt(document.getElementById('st-rep').textContent) + 1;
+  document.getElementById('st-agents').textContent = document.getElementById('st-rep').textContent;
+  sessionStorage.setItem('sdis_submitted','1');
+}
+if (sessionStorage.getItem('sdis_submitted') === '1') {
+  document.getElementById('form-wrap').classList.add('hidden');
+  document.getElementById('success-anim').classList.add('show');
+}
+
+/* ══ PUBLISH SITUATION ══ */
+function publishSit() {
+  const t = document.getElementById('a-titre').value.trim();
+  const tx = document.getElementById('a-texte').value.trim();
+  if (!t || !tx) { alert('Remplissez le titre et la description.'); return; }
+  document.getElementById('sit-titre').textContent = t;
+  document.getElementById('sit-texte').innerHTML = tx.replace(/([?!.])(\s|$)/g,'$1<strong> Comment gérez-vous cette situation ?</strong>');
+  document.getElementById('sit-texte').textContent = tx;
+  alert('✅ Situation publiée !');
+}
+
+/* ══ CHAT ══ */
+const SYS = `Tu es un assistant bienveillant et professionnel spécialisé dans la gestion du stress et des risques psychosociaux (RPS) pour les sapeurs-pompiers du SDIS 13. Tu aides les agents à comprendre et gérer leur stress. Tu connais la cohérence cardiaque, la respiration, le mindfulness, les signaux d'alerte des RPS. Tu t'exprimes avec empathie, de façon concise (3-4 phrases max). Si quelqu'un exprime une détresse sérieuse, invite-le à contacter le référent RPS ou le psychologue du SDIS. Réponds toujours en français.`;
+
+async function sendChat() {
+  const inp = document.getElementById('chat-inp');
+  const msg = inp.value.trim();
+  if (!msg) return;
+  inp.value = '';
+  appendMsg(msg, 'user');
+  const loader = appendLoader();
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, system:SYS, messages:[{role:'user',content:msg}] })
+    });
+    const d = await r.json();
+    loader.remove();
+    appendMsg(d.content?.[0]?.text || 'Désolé, erreur de réponse.', 'bot');
+  } catch {
+    loader.remove();
+    appendMsg('Erreur de connexion. Réessayez.', 'bot');
+  }
+}
+
+function sendChip(txt) {
+  document.getElementById('chat-inp').value = txt;
+  sendChat();
+}
+
+function appendMsg(txt, role) {
+  const b = document.getElementById('chat-body');
+  const d = document.createElement('div');
+  d.className = 'cmsg ' + role;
+  d.textContent = txt;
+  b.appendChild(d);
+  b.scrollTop = b.scrollHeight;
+  return d;
+}
+
+function appendLoader() {
+  const b = document.getElementById('chat-body');
+  const d = document.createElement('div');
+  d.className = 'cmsg typing';
+  d.innerHTML = '<div class="tdot"></div><div class="tdot"></div><div class="tdot"></div>';
+  b.appendChild(d);
+  b.scrollTop = b.scrollHeight;
+  return d;
+}
+
+/* ══ ANALYSE IA ══ */
+async function lancerIA() {
+  const ideal = document.getElementById('a-ideal').value.trim();
+  const reps = document.getElementById('a-reps').value.trim();
+  if (!ideal || !reps) { alert('Remplissez la réponse idéale et les réponses à analyser.'); return; }
+  const btn = document.getElementById('ai-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span>⏳</span> Analyse en cours…';
+  const prompt = `Tu es expert en RPS pour sapeurs-pompiers. Voici la RÉPONSE IDÉALE du référent :
+"${ideal}"
+
+Voici les RÉPONSES DES AGENTS (une par paragraphe) :
+${reps}
+
+Pour chaque réponse : évalue sa pertinence /100 par rapport à la réponse idéale, et justifie en 1-2 phrases bienveillantes. Classe du plus au moins pertinent.
+
+Format :
+🥇 Réponse 1 — [score]/100
+✅ [justification]
+
+🥈 Réponse 2 — [score]/100
+✅ [justification]
+
+…etc.
+
+Sois encourageant. Mets en valeur les points forts de chaque réponse.`;
+
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user',content:prompt}] })
+    });
+    const d = await r.json();
+    const res = document.getElementById('ai-result');
+    res.textContent = d.content?.[0]?.text || 'Erreur.';
+    res.classList.add('show');
+  } catch {
+    document.getElementById('ai-result').textContent = 'Erreur réseau.';
+    document.getElementById('ai-result').classList.add('show');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<span>⚡</span> Relancer l\'analyse';
+}
+
+/* ══ DATE SEMAINE ══ */
+const now = new Date();
+const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay()+6)%7));
+const sun = new Date(mon); sun.setDate(mon.getDate()+6);
+const fmt = d => d.toLocaleDateString('fr-FR',{day:'numeric',month:'long'});
+</script>
+</body>
+</html>
